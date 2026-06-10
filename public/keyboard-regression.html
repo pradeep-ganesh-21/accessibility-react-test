@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Keyboard regression page</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; }
+    section { margin: 20px 0; padding: 12px; border: 1px solid #ddd; }
+    h2 { font-size: 1rem; margin: 0 0 8px; }
+    button, input { font-size: 1rem; padding: 6px 12px; margin: 4px; }
+    .good:focus-visible { outline: 3px solid #1a73e8; outline-offset: 2px; }
+    .modal { background: #fff; border: 2px solid #333; padding: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Keyboard regression page</h1>
+  <p>This page exercises the keyboard-trap detectors (WCAG 2.1.2) — kept on
+     a separate URL from the focus-order page so a trap can't poison the
+     focus-order analysis.</p>
+
+  <a href="/">&larr; Back to home</a>
+
+  <section>
+    <h2>Control (no issues)</h2>
+    <button class="good" id="good-1">Good button 1</button>
+    <button class="good" id="good-2">Good button 2</button>
+  </section>
+
+  <section>
+    <h2>Modal keyboard trap — review (broken Escape, has Close control)</h2>
+    <div class="modal" role="dialog" aria-modal="true" id="trap-review" aria-label="Trapping modal">
+      <input type="text" id="tr-input" value="trapped field" aria-label="Trapped field" />
+      <button id="tr-close" aria-label="Close">&times;</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Non-modal keyboard trap — blocker</h2>
+    <div id="trap-blocker">
+      <input type="text" id="tb-1" value="field 1" aria-label="Trap field 1" />
+      <input type="text" id="tb-2" value="field 2" aria-label="Trap field 2" />
+    </div>
+  </section>
+
+  <script>
+    function trapWithin(region) {
+      region.addEventListener('keydown', function (e) {
+        if (e.key !== 'Tab') return;
+        var items = Array.from(region.querySelectorAll('input, button'));
+        if (items.length === 0) return;
+        var first = items[0];
+        var last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      });
+    }
+    var trapReview = document.getElementById('trap-review');
+    trapReview.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { e.preventDefault(); }
+    });
+    trapWithin(trapReview);
+    trapWithin(document.getElementById('trap-blocker'));
+  </script>
+</body>
+</html>

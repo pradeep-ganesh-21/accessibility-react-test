@@ -1,0 +1,26 @@
+/* Block-level so each button sits on its own line, well clear of the next
+   one's tier-2 screenshot clip. */
+.no-indicator {
+  display: block;
+  width: 220px;
+  outline: none;
+  background: #eee;
+  color: #000;
+  border: 1px solid #999;
+  margin: 28px 4px;
+  padding: 8px 12px;
+}
+
+/* Force outline:none on focus, with !important to defeat the App.css catch-all
+   `button:focus-visible { outline: ... }` (lower specificity but it sets the
+   property; an empty higher-specificity rule wouldn't unset it). This is
+   exactly the WCAG 2.4.7 violation pattern — a developer suppressing the
+   browser default focus ring without supplying a replacement. */
+.no-indicator:focus,
+.no-indicator:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: #999 !important;
+  background: #eee !important;
+  color: #000 !important;
+}

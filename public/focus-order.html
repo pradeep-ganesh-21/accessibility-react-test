@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Focus-order divergence page</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; }
+    section { margin: 20px 0; padding: 12px; border: 1px solid #ddd; }
+    .grid { display: grid; grid-template-columns: repeat(2, 220px); gap: 12px; }
+    .grid button { display: block; height: 40px; }
+    .grid button:focus-visible { outline: 3px solid #1a73e8; outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <h1>Focus order divergence page</h1>
+  <p>This page exercises the geometric tab-order divergence detector
+     (WCAG 2.4.3, Point 4) — review-only finding, deterministic.</p>
+
+  <a href="/">&larr; Back to home</a>
+
+  <section>
+    <h2>Buttons with scrambled positive tabindex</h2>
+    <p>Visual reading order is left-to-right, top-to-bottom (a 4&times;2
+       grid: 1, 2, 3, 4, 5, 6, 7, 8). The keyboard tab order, driven by the
+       positive tabindex values, is 2, 6, 4, 8, 1, 5, 7, 3 — diverging from
+       BOTH visual order AND DOM order.</p>
+    <div class="grid">
+      <button tabindex="5" id="fo-1">Button One</button>
+      <button tabindex="1" id="fo-2">Button Two</button>
+      <button tabindex="8" id="fo-3">Button Three</button>
+      <button tabindex="3" id="fo-4">Button Four</button>
+      <button tabindex="6" id="fo-5">Button Five</button>
+      <button tabindex="2" id="fo-6">Button Six</button>
+      <button tabindex="7" id="fo-7">Button Seven</button>
+      <button tabindex="4" id="fo-8">Button Eight</button>
+    </div>
+  </section>
+</body>
+</html>
